@@ -13,8 +13,7 @@ Ce projet est un outil conçu pour générer une wordlist personnalisée à part
 ## Prérequis
 
 - Python 3.x
-- BeautifulSoup4 pour l'analyse du contenu du site web
-- Requests pour la récupération du contenu du site web
+- Clé API Codestral (Pour la verion avec IA)
 
 ## Installation
 
