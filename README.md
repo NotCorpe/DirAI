@@ -54,7 +54,7 @@ python -m spacy download nl_core_news_sm
 1. Exécutez le script en fournissant l'URL du site web ciblé :
 
 ```bash
-python url_to_wordlist.py https://exemple.com --url https://exemple.com --language (en/fr/it/de)
+python url_to_wordlist.py --url https://exemple.com --language (en/fr/it/de)
 ```
 
 2. Le script générera une wordlist dans le répertoire du projet.
