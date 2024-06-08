@@ -1,4 +1,3 @@
-import os
 import requests
 import json
 import argparse
@@ -6,7 +5,6 @@ from bs4 import BeautifulSoup
 import spacy
 from collections import Counter
 from urllib.parse import urljoin
-from mistralai.client import MistralClient
 
 class WebsiteSpider:
     def __init__(self, start_url, language, max_depth=3):
@@ -56,15 +54,20 @@ class WebsiteSpider:
             print(url)
 
 def get_enhanced_wordlist(wordlist, prompt):
-    api_key = "y6wOHPVEwhFdEhU5el0l0JkutKpFskmL"
-    client = MistralClient(api_key=api_key)
-    model = "codestral-latest"
-    response = client.completion(
-        model=model,
-        prompt=prompt,
-        suffix=f"\n{wordlist}",
-    )
-    enhanced_wordlist = response.choices[0].message.content.split("\n")
+    url = "https://codestral.mistral.ai/v1/fim/completions"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_API_KEY"
+    }
+    data = {
+        "model": "codestral-latest",
+        "prompt": prompt,
+        "suffix": "\n".join(wordlist)
+    }
+    print("ai is running...")
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    print(response.json())
+    enhanced_wordlist = response.json()["choices"][0]["message"]["content"].split("\n")
     return enhanced_wordlist
 
 def main():
