@@ -1,10 +1,12 @@
+import os
 import requests
+import json
+import argparse
 from bs4 import BeautifulSoup
 import spacy
-import langdetect
 from collections import Counter
 from urllib.parse import urljoin
-import argparse
+from mistralai.client import MistralClient
 
 class WebsiteSpider:
     def __init__(self, start_url, language, max_depth=3):
@@ -53,6 +55,18 @@ class WebsiteSpider:
         for url in self.visited_urls:
             print(url)
 
+def get_enhanced_wordlist(wordlist, prompt):
+    api_key = "y6wOHPVEwhFdEhU5el0l0JkutKpFskmL"
+    client = MistralClient(api_key=api_key)
+    model = "codestral-latest"
+    response = client.completion(
+        model=model,
+        prompt=prompt,
+        suffix=f"\n{wordlist}",
+    )
+    enhanced_wordlist = response.choices[0].message.content.split("\n")
+    return enhanced_wordlist
+
 def main():
     parser = argparse.ArgumentParser(description='Website Spider')
     parser.add_argument('--url', '-u', required=True, help='Start URL for the spider')
@@ -64,6 +78,14 @@ def main():
     spider = WebsiteSpider(start_url, language, max_depth)
     spider.parse(start_url)
     spider.close()
+
+    # Enhance the wordlist
+    prompt = "Voici une liste de mots-clés scrapée sur le site : (site). Je souhaite utiliser cette liste de mots-clés pour bruteforcer les répertoires de ce site. Pour chaque mot de la liste, ajoute des variations, des synonymes ou des mots de la même famille et formate la liste pour pouvoir trouver des répertoires. Si il y'a une virgule dans un mot-clé, arrange-toi pour l'enlever pour que le mot-clé soit compatible avec le nom d'un potentiel répertoire."
+    enhanced_keywords = get_enhanced_wordlist(spider.keywords, prompt)
+    sorted_enhanced_keywords = sorted(set(enhanced_keywords))
+    with open('enhanced_keywords.txt', 'w') as f:
+        for keyword in sorted_enhanced_keywords:
+            f.write(f"{keyword.replace(',', '')}\n")
 
 if __name__ == '__main__':
     main()

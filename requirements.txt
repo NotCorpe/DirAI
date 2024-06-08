@@ -2,3 +2,4 @@ beautifulsoup4
 langdetect
 requests
 spacy
+mistralai
