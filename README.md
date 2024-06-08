@@ -21,7 +21,7 @@ Ce projet est un outil conçu pour générer une wordlist personnalisée à part
 1. Clonez le dépôt sur votre machine locale :
 
 ```bash
-git clone https://github.com/Notcorpe/url_to_wordlist.git
+git clone https://github.com/NotCorpe/url_to_wordlist.git
 ```
 
 2. Accédez au répertoire du projet :
